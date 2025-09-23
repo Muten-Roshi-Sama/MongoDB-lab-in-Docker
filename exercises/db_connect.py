@@ -1,4 +1,4 @@
-# python_scripts/db_connect.py
+# exercises/db_connect.py
 from pymongo import MongoClient
 import pprint
 
@@ -20,3 +20,10 @@ def showDB():
         return
     
     pprint.pprint(all_movies)
+
+
+def cleanup():
+    db = get_db()
+    db.drop_collection("movies")
+    print("Dropped 'movies' collection.")
+    showDB()

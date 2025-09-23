@@ -26,5 +26,146 @@
         "year": 1994,
         "genre": "Crime",
         "actors": ["John Travolta", "Uma Thurman", "Samuel L. Jackson"]
+    },
+    {
+        "title": "The Godfather Part II",
+        "director": "Francis Ford Coppola",
+        "year": 1974,
+        "genre": "Crime",
+        "actors": ["Al Pacino", "Robert De Niro", "Robert Duvall"]
+    },
+    {
+        "title": "The Godfather Part III",
+        "director": "Francis Ford Coppola", 
+        "year": 1990,
+        "genre": "Crime",
+        "actors": ["Al Pacino", "Andy Garcia", "Diane Keaton"]
+    },
+    {
+        "title": "Apocalypse Now",
+        "director": "Francis Ford Coppola",
+        "year": 1979,
+        "genre": "Drama",
+        "actors": ["Marlon Brando", "Martin Sheen", "Robert Duvall"]
+    },
+    {
+        "title": "The Conversation",
+        "director": "Francis Ford Coppola",
+        "year": 1974,
+        "genre": "Thriller", 
+        "actors": ["Gene Hackman", "John Cazale", "Allen Garfield"]
+    },
+    {
+        "title": "Cast Away",
+        "director": "Robert Zemeckis",
+        "year": 2000,
+        "genre": "Drama",
+        "actors": ["Tom Hanks", "Helen Hunt", "Nick Searcy"]
+    },
+    {
+        "title": "Back to the Future",
+        "director": "Robert Zemeckis",
+        "year": 1985,
+        "genre": "Science Fiction",
+        "actors": ["Michael J. Fox", "Christopher Lloyd", "Lea Thompson"]
+    },
+    {
+        "title": "Forrest Gump 2",
+        "director": "Robert Zemeckis", 
+        "year": 2024,
+        "genre": "Drama",
+        "actors": ["Tom Hanks", "Robin Wright", "Gary Sinise"]
+    },
+    {
+        "title": "The Polar Express",
+        "director": "Robert Zemeckis",
+        "year": 2004,
+        "genre": "Animation",
+        "actors": ["Tom Hanks", "Chris Coppola", "Michael Jeter"]
+    },
+    {
+        "title": "The Matrix Reloaded",
+        "director": "Lana Wachowski",
+        "year": 2003,
+        "genre": "Science Fiction",
+        "actors": ["Keanu Reeves", "Laurence Fishburne", "Carrie-Anne Moss"]
+    },
+    {
+        "title": "The Matrix Revolutions",
+        "director": "Lana Wachowski",
+        "year": 2003,
+        "genre": "Science Fiction", 
+        "actors": ["Keanu Reeves", "Laurence Fishburne", "Carrie-Anne Moss"]
+    },
+    {
+        "title": "Cloud Atlas",
+        "director": "Lana Wachowski",
+        "year": 2012,
+        "genre": "Science Fiction",
+        "actors": ["Tom Hanks", "Halle Berry", "Hugh Grant"]
+    },
+    {
+        "title": "Speed Racer",
+        "director": "Lana Wachowski",
+        "year": 2008,
+        "genre": "Action",
+        "actors": ["Emile Hirsch", "Christina Ricci", "John Goodman"]
+    },
+    {
+        "title": "Kill Bill: Vol. 1",
+        "director": "Quentin Tarantino",
+        "year": 2003,
+        "genre": "Crime",
+        "actors": ["Uma Thurman", "Lucy Liu", "Vivica A. Fox"]
+    },
+    {
+        "title": "Kill Bill: Vol. 2",
+        "director": "Quentin Tarantino", 
+        "year": 2004,
+        "genre": "Crime",
+        "actors": ["Uma Thurman", "David Carradine", "Michael Madsen"]
+    },
+    {
+        "title": "Reservoir Dogs",
+        "director": "Quentin Tarantino",
+        "year": 1992,
+        "genre": "Crime",
+        "actors": ["Harvey Keitel", "Tim Roth", "Michael Madsen"]
+    },
+    {
+        "title": "Inglourious Basterds",
+        "director": "Quentin Tarantino",
+        "year": 2009,
+        "genre": "War",
+        "actors": ["Brad Pitt", "Christoph Waltz", "Mélanie Laurent"]
+    },
+    {
+        "title": "Django Unchained",
+        "director": "Quentin Tarantino",
+        "year": 2012,
+        "genre": "Western",
+        "actors": ["Jamie Foxx", "Christoph Waltz", "Leonardo DiCaprio"]
+    },
+    {
+        "title": "The Irishman",
+        "director": "Martin Scorsese",
+        "year": 2019,
+        "genre": "Crime",
+        "actors": ["Robert De Niro", "Al Pacino", "Joe Pesci"]
+    },
+    {
+        "title": "Goodfellas",
+        "director": "Martin Scorsese", 
+        "year": 1990,
+        "genre": "Crime",
+        "actors": ["Robert De Niro", "Ray Liotta", "Joe Pesci"]
+    },
+    {
+        "title": "Heat",
+        "director": "Michael Mann",
+        "year": 1995,
+        "genre": "Crime",
+        "actors": ["Al Pacino", "Robert De Niro", "Val Kilmer"]
     }
+
 ]
