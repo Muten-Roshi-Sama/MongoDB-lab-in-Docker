@@ -1,0 +1,75 @@
+[
+    {
+        "item": "Black Ops 2",
+        "developper": "Treyarch",
+        "year": 2002,
+        "genre": ["FPS"],
+        "available" : 35,
+        "price": 29.99,
+        "platforms": ["PS3", "PC", "Xbox", "WII"]
+    },
+    {
+        "item": "God Of War",
+        "developper": "SIE",
+        "year": 2002,
+        "genre": ["Adventure"],
+        "available" : 4,
+        "price": 89.99,
+        "platforms": ["PS3", "PC", "Xbox", "WII"]
+    },
+    {
+    "item": "The Legend of Zelda: Breath of the Wild",
+    "developer": "Nintendo",
+    "year": 2017,
+    "genre": ["Action","Adventure"],
+    "available" : 4,
+    "price": 59.99,
+    "platforms": ["Nintendo Switch"]
+    },
+    {
+        "item": "Elden Ring",
+        "developer": "FromSoftware",
+        "year": 2022,
+        "genre": ["Action", "RPG"],
+        "available": 12,
+        "price": 59.99,
+        "platforms": ["PS5", "Xbox Series X", "Windows"]
+    },
+    {
+        "item": "Minecraft",
+        "developer": "Mojang",
+        "year": 2011,
+        "genre": ["Adventure", "Survival"],
+        "available": 87,
+        "price": 26.95,
+        "platforms": ["PC", "PS4", "Xbox One", "Nintendo Switch", "Mobile"]
+    },
+    {
+        "item": "Grand Theft Auto V",
+        "developer": "Rockstar Games",
+        "year": 2013,
+        "genre": ["Action", "Adventure"],
+        "available": 23,
+        "price": 29.99,
+        "platforms": ["PS5", "Xbox", "PC", "PS4"]
+    },
+    {
+        "item": "Counter-Strike 2",
+        "developer": "Valve",
+        "year": 2023,
+        "genre": ["FPS"],
+        "available": 56,
+        "price": 0.00,
+        "platforms": ["PC"]
+    },
+    {
+        "item": "Super Mario Odyssey",
+        "developer": "Nintendo",
+        "year": 2017,
+        "genre": ["Platform", "Adventure"],
+        "available": 8,
+        "price": 59.99,
+        "platforms": ["Nintendo Switch"]
+    }
+    
+]

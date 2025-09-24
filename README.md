@@ -1,4 +1,4 @@
-## Installation Procedure
+## Docker Installation Procedure
 1. Install WSL
 >> wsl --install
 (in admin Powershell)
@@ -8,28 +8,52 @@ Restart PC
 >> docker-compose up -d
 (in the folder where your docker-compose.yml is)
 
+# CRUD, Indexation & Aggregation :
 
 
+### Recommended Project Structure
 
-## Recommended Project Structure
-
-mongodb-project/
+CRUD_Indexing_Aggregation/
 ├── docker-compose.yml
 ├── data/                         # Raw data files (JSON, CSV)
 │   └── movies.json
-├── python_scripts/                    # Python scripts
-│   ├── 01_import_data.py
-│   ├── 02_add_movies.py
-│   ├── 03_update_movies.py
-│   ├── 04_delete_movies.py
-│   ├── 05_complex_queries.py
-│   ├── 99_cleanup.py
-│   └── requirements.txt
-├── js_scripts/                            # Javascript scripts
+├── exercises/                    # Python scripts
+│   ├── db_connect.py                   # functions like : get_db, showDB, cleanup
+│   ├── importData.py                   # populate DB from movies.json
+│   ├── x1.py
+│   ├── x2.py
+│   ├── x3.py
+│   ├── cleanup.py                      # callable script from terminal to interact with db
+│   └── requirements.txt                # pymongo, dnspython
+├── js_scripts/                    # Javascript scripts
 │   ├── import_data.js
 │   ├── queries.js
 │   ├── updates.js
 │   └── cleanup.js
 └── README.md
+
+
+# Store API:
+
+### Structure :
+storeApi/
+├── /venv
+├── data/                        
+│   ├── games.json
+│   └── clients.json
+├── app.py # Main Flask application
+├── requirements.txt
+├── Dockerfile
+└── docker-compose.yml
+
+
+Setup venv (Open powershell as admin):
+>> cd "C:\Users\user\Desktop\"
+>> cd storeAPI
+>> python -m venv venv
+Activate venv:
+>> .\venv\Scripts\Activate.ps1
+Install Dependencies :
+>> pip install -r requirements.txt
 
 

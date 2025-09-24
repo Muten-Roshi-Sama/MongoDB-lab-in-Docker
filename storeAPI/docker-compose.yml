@@ -1,0 +1,40 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: storeAPI
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./data:/shared_data
+      - ./py_scripts:/shared_scripts_py
+      # - ./python_scripts:/shared_scripts_ex
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+      ME_CONFIG_MONGODB_SERVER: mongo
+    depends_on:
+      - mongo
+
+  python:
+    image: python:3.10
+    container_name: mypython
+    volumes:
+      # - ./python_scripts:/app/python_scripts
+      - ./py_scripts:/app/py_scripts
+      - ./data:/app/data
+    working_dir: /app
+    depends_on:
+      - mongo
+    command: tail -f /dev/null   # keeps container running
+
+volumes:
+  mongodb_data:

@@ -208,9 +208,10 @@ movies = movies.find().sort("year", -1)   #! descending (-1)
 
 # $set : set/overwrite a field
 # $unset : Remove a field
-# $push : Remove a single value from an Array
-# $pull, 
-# $inc
+# $push : add a value from an Array
+# $pull : Remove a single value from an Array
+# $inc : movies.update_one({"title": "Inception"}, {"$inc": {"rating": 1}} )
+
 
 
 
@@ -254,7 +255,12 @@ movies.update_many(
 )
 
 
-#* 5. Delctc: 
+#* 5. Delete: 
+
 # Delete the "Inception" movie document.
+movies.delete_one({"title":"Forret Gump"})
+
+# Delete ALL based on criteria
+movies.delete_many({"year": {"$lt": 2010}})
 
 
