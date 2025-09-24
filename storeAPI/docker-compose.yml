@@ -7,9 +7,7 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
-      - ./data:/shared_data
-      - ./py_scripts:/shared_scripts_py
-      # - ./python_scripts:/shared_scripts_ex
+      - ./data:/app/data
 
   mongo-express:
     image: mongo-express:latest
@@ -25,16 +23,18 @@ services:
       - mongo
 
   python:
-    image: python:3.10
+    build:
+      context: .              #current folder ./storeAPI
+      dockerfile: Dockerfile
     container_name: mypython
+    ports:
+      - "5000:5000"            # Expose Flask app
     volumes:
-      # - ./python_scripts:/app/python_scripts
-      - ./py_scripts:/app/py_scripts
-      - ./data:/app/data
+      - ./app:/app            # contains /data folder
     working_dir: /app
     depends_on:
       - mongo
-    command: tail -f /dev/null   # keeps container running
+    # command: python app.py       # start flask automatically when >> docker compose up
 
 volumes:
   mongodb_data:

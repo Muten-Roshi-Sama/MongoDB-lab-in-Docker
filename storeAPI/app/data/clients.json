@@ -1,0 +1,66 @@
+[
+    {
+        "name": "John Doe",
+        "email": "johndoe@hotmail.com",
+        "joined_date": "2024-01-15",
+        "membership": "gold",
+        "total_spent": 119.98,
+        "bought": ["Black Ops 2", "God Of War"]
+    },
+    {
+        "name": "Sarah Johnson",
+        "email": "sarah.johnson@gmail.com",
+        "joined_date": "2024-02-10",
+        "membership": "premium",
+        "total_spent": 119.98,
+        "bought": ["The Legend of Zelda", "Super Mario Odyssey"]
+    },
+    {
+        "name": "Mike Chen",
+        "email": "mike.chen@outlook.com",
+        "joined_date": "2023-12-05",
+        "membership": "gold",
+        "total_spent": 149.97,
+        "bought": ["Elden Ring", "Grand Theft Auto V", "Black Ops 2"]
+    },
+    {
+        "name": "Emily Rodriguez",
+        "email": "emily.rodriguez@yahoo.com",
+        "joined_date": "2024-03-22",
+        "membership": "basic",
+        "total_spent": 26.95,
+        "bought": ["Minecraft", "Counter-Strike 2"]
+    },
+    {
+        "name": "David Kim",
+        "email": "david.kim@protonmail.com",
+        "joined_date": "2023-11-18",
+        "membership": "premium",
+        "total_spent": 209.96,
+        "bought": ["God Of War", "Elden Ring", "Grand Theft Auto V", "Super Mario Odyssey"]
+    },
+    {
+        "name": "Jessica Williams",
+        "email": "jessica.w@icloud.com",
+        "joined_date": "2024-01-30",
+        "membership": "basic",
+        "total_spent": 59.99,
+        "bought": ["The Legend of Zelda"]
+    },
+    {
+        "name": "Carlos Martinez",
+        "email": "carlos.martinez@gmail.com",
+        "joined_date": "2023-09-14",
+        "membership": "gold",
+        "total_spent": 86.94,
+        "bought": ["Counter-Strike 2", "Minecraft", "Black Ops 2"]
+    },
+    {
+        "name": "Amanda Thompson",
+        "email": "amanda.t@hotmail.com",
+        "joined_date": "2024-04-05",
+        "membership": "basic",
+        "total_spent": 119.98,
+        "bought": ["Elden Ring", "God Of War"]
+    }
+]

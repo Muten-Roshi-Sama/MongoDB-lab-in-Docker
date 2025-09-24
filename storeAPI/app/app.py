@@ -1,10 +1,17 @@
 # app.py
+
+# --------------------------------------------------------------------
+#* Exercise 4: Building a Video Game Store API With Flask and MongoDB 
+# Use Flask backend, MongoDB, Pymongo, and JSON format for all API's
+# ---------------------------------------------------------------------
+
 from flask import Flask, jsonify, request
 from pymongo import MongoClient
 from bson import ObjectId
 import json, os
 
 app = Flask(__name__)
+ROUTE = 5000;
 
 # MongoDB connection
 client = MongoClient("mongodb://mongo:27017/")
@@ -14,8 +21,12 @@ db = client["storeDB"]
 games = db["games"]
 clients = db["clients"]
 
+# APP
+@app.route('/')
+def home():
+    return jsonify({"message": "Video Game Store API"})
 
-#*-----------Init DB------------
+#* ------------Helpers------------
 def import_from_file(file_path, collection):
     """Import data from JSON file into specified collection"""
     full_path = os.path.join(os.path.dirname(__file__), file_path)
@@ -34,31 +45,63 @@ def import_from_file(file_path, collection):
         else:
             print(f"No data found in {file_path}")
 
+def serialize_doc(doc):
+    """Convert ObjectId fields to string for JSON serialization."""
+    doc_copy = doc.copy()
+    if "_id" in doc_copy:
+        doc_copy["_id"] = str(doc_copy["_id"])
+    return doc_copy
+
+
+#*-----------Init DB------------
+@app.route('/api/initDB/<string:collection>', methods=['GET'])
 def populate_collections(collection):
-    match collection:
-        case "games":
-            import_from_file("../data/games.json", games)
-            print("populated games collection.")
-        case "clients":
-            import_from_file("../data/clients.json", clients)
-            print("populated clients collection.")
+    file_map = {
+        "games": "data/games.json",
+        "clients": "data/clients.json"
+    }
+    try:
+        match collection:
+            case "games":
+                import_from_file(file_map["games"], games)
+                print("populated games collection.")
+                return jsonify({"message": "populated games collection."})
+            case "clients":
+                import_from_file(file_map["clients"], clients)
+                print("populated clients collection.")
+                return jsonify({"message": "populated clients collection."})
 
-        case "all": 
-            import_from_file("../data/games.json", games)
-            import_from_file("../data/clients.json", clients)
-            print("populated all collection.")
+            case "all": 
+                import_from_file(file_map["games"], games)
+                import_from_file(file_map["clients"], clients)
+                print("populated all collection.")
+                return jsonify({"message": "populated all collections."})
+            case _:
+                print("Error [populate_collections]: Unknown collection.")
+                return jsonify({"error": "Unknown collection."}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
+@app.route('/api/cleanDB', methods=['GET'])
 def cleanup(collection):
     db.drop_collection(collection)
     # print("[cleanup] Dropped 'movies' collection.")
     return
 
+@app.route('/api/showDB/<string:collection>', methods=['GET'])
+def show_collection(collection):
+    coll = db[collection]
+    docs = list(coll.find())
+    # Convert ObjectId to string for JSON
+    for doc in docs:
+        doc["_id"] = str(doc["_id"])
+    return jsonify(docs)
 
 
-# ---------------------------------------------------------
+#*------------API-----------
 
-#* Exercise 4: Building a Video Game Store API With Flask and MongoDB 
-# Use Flask backend, MongoDB, Pymongo, and JSON format for all API's
+
+
 
 #? 1. CRUD (Create, Read, Update, Delete) operations
 
@@ -76,45 +119,6 @@ def cleanup(collection):
 
 
 
-# Vidco Game Storc Data Model 
-# Before you begin coding, you will need to design your own data model for the different entities. Your 
-# data model should include at least a gangs collection to store information about eacb video game and a 
-# clients collection to store information about the clients of store Think about what information a 
-# user would to know about a game, a client, etc. For example, you might include fields such as: 
-# A unique identifier for cach game. 
-# The title of the game. 
-# The genre of the game. 
-# The release year Of the game. 
-# The platform(s) on whicA1 the game is available. 
-# Gctting Startcd 
-# Environment Setup: Croate a new project folder and eventually set up a Python virtual envi- 
-# • Dependencies: Install Flask and PyMong01 using pip. 
-# • Database Connection: Connect your Flask application to a local MongoDB instance or a cloud- 
-# based service like MongoDB Atlas. 
-# • API Endpoints: Define the Flask routes for cach Of the rC%1uircd CRUD operations. example, 
-# a POST request to / api/ games could croate a new game, while a GET request to /api/ganes/ 
-# would retrieve a specific game. 
-# ht / h _ htm I fla
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#*------------API-----------
-@app.route('/')
-def home():
-    return jsonify({"message": "Video Game Store API"})
 
 @app.route('/api/games', methods=['GET'])
 def get_all_games():
@@ -173,5 +177,8 @@ def delete_game(game_id):
     except:
         return jsonify({"error": "Invalid ID format"}), 400
 
+
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=ROUTE, debug=True)
