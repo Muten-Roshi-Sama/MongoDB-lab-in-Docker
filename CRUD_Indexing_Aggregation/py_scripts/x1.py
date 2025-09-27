@@ -204,6 +204,9 @@ movies = movies.find().sort("year", -1)   #! descending (-1)
 
 
 
+
+
+
 #* Update: 
 
 # $set : set/overwrite a field
@@ -211,10 +214,6 @@ movies = movies.find().sort("year", -1)   #! descending (-1)
 # $push : add a value from an Array
 # $pull : Remove a single value from an Array
 # $inc : movies.update_one({"title": "Inception"}, {"$inc": {"rating": 1}} )
-
-
-
-
 
 
 # Update a single document

@@ -1,7 +1,7 @@
 [
     {
         "item": "Black Ops 2",
-        "developper": "Treyarch",
+        "publisher": "Treyarch",
         "year": 2002,
         "genre": ["FPS"],
         "available" : 35,
@@ -10,7 +10,7 @@
     },
     {
         "item": "God Of War",
-        "developper": "SIE",
+        "publisher": "SIE",
         "year": 2002,
         "genre": ["Adventure"],
         "available" : 4,
@@ -19,7 +19,7 @@
     },
     {
     "item": "The Legend of Zelda",
-    "developer": "Nintendo",
+    "publisher": "Nintendo",
     "year": 2017,
     "genre": ["Action","Adventure"],
     "available" : 4,
@@ -28,7 +28,7 @@
     },
     {
         "item": "Elden Ring",
-        "developer": "FromSoftware",
+        "publisher": "FromSoftware",
         "year": 2022,
         "genre": ["Action", "RPG"],
         "available": 12,
@@ -37,7 +37,7 @@
     },
     {
         "item": "Minecraft",
-        "developer": "Mojang",
+        "publisher": "Mojang",
         "year": 2011,
         "genre": ["Adventure", "Survival"],
         "available": 87,
@@ -46,7 +46,7 @@
     },
     {
         "item": "Grand Theft Auto V",
-        "developer": "Rockstar Games",
+        "publisher": "Rockstar Games",
         "year": 2013,
         "genre": ["Action", "Adventure"],
         "available": 23,
@@ -55,7 +55,7 @@
     },
     {
         "item": "Counter-Strike 2",
-        "developer": "Valve",
+        "publisher": "Valve",
         "year": 2023,
         "genre": ["FPS"],
         "available": 56,
@@ -64,12 +64,11 @@
     },
     {
         "item": "Super Mario Odyssey",
-        "developer": "Nintendo",
+        "publisher": "Nintendo",
         "year": 2017,
         "genre": ["Platform", "Adventure"],
         "available": 8,
         "price": 59.99,
         "platforms": ["Nintendo Switch"]
     }
-    
 ]
