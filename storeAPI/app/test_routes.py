@@ -110,6 +110,38 @@ def update_instance(collection, field, value, updates):
     
     return response
 
+def delete_instance(collection, identifier, by_field=None):
+    """
+    Delete an instance from a collection
+    
+    Args:
+        collection: Collection name (e.g., "games")
+        identifier: ID or value to identify the instance
+        by_field: Field to use for identification (None = use ID)
+    """
+    if by_field:
+        # URL encode the identifier
+        encoded_id = requests.utils.quote(identifier)
+        url = f"/delete/{collection}/{encoded_id}?field={by_field}"
+    else:
+        url = f"/delete/{collection}/{identifier}"
+    
+    print(f"--- DELETE {url} ---")
+    
+    response = requests.delete(HOST + url)
+    
+    if response.status_code == 200:
+        result = response.json()
+        print("✅ Delete successful:")
+        print(json.dumps(result, indent=2))
+    else:
+        print(f"❌ Error {response.status_code}:")
+        print(response.json())
+    
+    return response
+
+
+
 # ----------
 #*   Routes
 # ----------
@@ -166,13 +198,13 @@ if True:
     find_instance("games","item", "The Legend of Zelda 2")
 
 
-
-
+    
     #----- Delete
     # sendRequest_get("cleanDB", "all", True)
     # sendRequest_get("cleanDB", "games", True)
     # sendRequest_get("cleanDB", "clients", True) 
 
-
+    delete_instance("games", "The Legend of Zelda 2", by_field="item")
+    find_instance("games","item", "The Legend of Zelda 2")
 
 

@@ -287,9 +287,53 @@ def update_instance_by_field(collection, identifier):
 
 #?---- Delete: 
 # Remove a game from the inventory. 
+@app.route('/api/delete/<string:collection>/<string:identifier>', methods=['DELETE'])
+def delete_instance(collection, identifier):
+    """Remove an instance by ID or field value"""
+    try:
+        if not collection_exists(collection):
+            return jsonify({"error": f"Collection '{collection}' does not exist"}), 404
+
+        target_collection = db[collection]
+        
+        # Determine if we're deleting by ID or by field
+        field_name = request.args.get('field', None)
+        
+        if field_name == '_id' or not field_name:
+            # Delete by ID
+            if not ObjectId.is_valid(identifier):
+                return jsonify({"error": "Invalid ID format"}), 400
+            
+            filter_query = {"_id": ObjectId(identifier)}
+        else:
+            # Delete by field value (delete first matching instance)
+            filter_query = {field_name: identifier}
+        
+        # Check if instance exists
+        instance = target_collection.find_one(filter_query)
+        if not instance:
+            return jsonify({"error": f"{collection.capitalize()} not found"}), 404
+        
+        # Delete the instance
+        result = target_collection.delete_one(filter_query)
+        
+        if result.deleted_count > 0:
+            instance["_id"] = str(instance["_id"])
+            return jsonify({
+                "message": f"{collection.capitalize()} deleted successfully",
+                "deleted_instance": instance
+            })
+        else:
+            return jsonify({"error": "Failed to delete instance"}), 500
+            
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
-# Remove all data from a collection, or all collections if "all" specified
+
+
+
+# Remove ALL data from a collection, or all collections if "all" specified
 @app.route('/api/cleanDB/<string:collection>', methods=['GET'])
 def cleanup(collection):
     try:
