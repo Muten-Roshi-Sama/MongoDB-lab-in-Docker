@@ -8,8 +8,26 @@ Restart PC
 >> docker-compose up -d
 (in the folder where your docker-compose.yml is)
 
-# CRUD, Indexation & Aggregation :
 
+### Full file structure:
+
+mongoDB_project/
+├── .gitignore/
+├── CRUD_Indexing_Aggregation/
+└── storeApi/
+│   ├── venv/
+│   ├── data/  
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   ├── requirements.txt
+│   └── app.py
+
+
+
+
+
+
+# CRUD, Indexation & Aggregation :
 
 ### Recommended Project Structure
 
@@ -38,13 +56,15 @@ CRUD_Indexing_Aggregation/
 ### Structure :
 storeApi/
 ├── /venv
-├── data/                        
-│   ├── games.json
-│   └── clients.json
-├── app.py # Main Flask application
-├── requirements.txt
+├── app/
+│   ├── app.py
+│   ├── data/
+│   │   ├── games.json
+│   │   └── clients.json
 ├── Dockerfile
-└── docker-compose.yml
+├── docker-compose.yml
+└── requirements.txt
+
 
 
 Setup venv (Open powershell as admin):
@@ -56,4 +76,7 @@ Activate venv:
 Install Dependencies :
 >> pip install -r requirements.txt
 
-
+Launch:
+>> docker compose up -d
+>> docker exec -it mypython bash
+>> python app.py
