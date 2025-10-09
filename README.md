@@ -103,6 +103,86 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
+
+
+
+---
+
+## Store API Project + Redis
+
+### Goals :
+- Redis is an in-memory key-value store. It's blazingly fast and supports simple data structures.
+- We’ll use it as a cache (not the source of truth): MongoDB remains authoritative.
+- Good for read-heavy endpoints: list endpoints (/showDB/games) and single-doc endpoints (/get/games/:id).
+- Basic flow: on GET, check Redis; if hit, return cached JSON. If miss, query Mongo, store JSON result in Redis with a TTL, then return it.
+- On writes (POST/PUT/DELETE), invalidate affected keys so no stale data is returned.
+
+
+### Parameters :
+- TTL of 120 sec. (Short TTL avoids staleness, long TTL boosts cache hit rate)
+
+### What we added (Redis caching + pytest)
+
+- Cache-aside strategy using Redis: the API checks Redis first for list and single-document responses. If a cached value exists it is returned immediately. On a cache miss the API queries MongoDB, stores the serialized JSON in Redis with a short TTL (default 120s), and then returns the response.
+- Cache keys used by the implementation (simple, human-readable):
+   - `<collection>:list` — cached JSON array for a full collection listing (e.g. `games:list`).
+   - `<collection>:id:<_id>` — cached single-document responses by MongoDB _id (e.g. `games:id:64e...`).
+   - When query parameters are involved the tests use a hashed key like `<collection>:list:<sha1(params)>` to keep list variants separate.
+- Invalidation on writes: the API deletes affected keys when documents are added/updated/deleted so clients don't receive stale data.
+
+### Why this is useful
+
+- Speeds up read-heavy endpoints (list and single-item GETs) without changing MongoDB as the source of truth.
+- Short TTL keeps data reasonably fresh while improving response time during bursts of reads.
+
+### How to run the server and tests (recommended)
+
+The repository includes both a Docker-based flow (recommended for parity with the lab) and a local development flow.
+
+1) Using Docker Compose (recommended)
+
+```powershell
+cd "C:\Users\user\Desktop\ECAM\DataBase\X2\mongoDB_project\storeAPI_Redis"
+docker compose up -d
+```
+
+This starts MongoDB, Redis, the Flask app container and optional helper services. Wait a few seconds for all services to become healthy.
+
+2) Run pytest from the host (uses the running compose services)
+
+```powershell
+# Optional: activate your venv if you prefer running tests in an isolated environment
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+
+# Run pytest (tests perform small API calls against the running compose services)
+python -m pytest -q
+```
+
+Notes:
+- The tests expect MongoDB and Redis to be reachable at the addresses defined in the compose file (inside Docker the Flask app connects to Redis using the Docker service name `redis`). The host running pytest connects to the Flask API over the HTTP port mapped by compose (default configuration in this lab maps the Flask API to a host port).
+- If you run tests locally without Docker you must ensure a MongoDB instance is running and the `MONGO_URI` used by the app points to it. Likewise, if you want Redis-enabled tests locally, run a local Redis instance and configure the app to point to it.
+
+### Quick troubleshooting
+
+- 415 Unsupported Media Type during tests: pytest helper functions send JSON using the `requests` client's `json=` parameter. If you see a 415, make sure you didn't accidentally send an empty body or remove the `json=` parameter.
+- Cache-related failures (tests asserting cache invalidation): if a list or id cache key isn't removed after a write, check that the Flask routes call the Redis helper to delete the appropriate key(s) after POST/PUT/DELETE operations.
+
+---
+
+## Addendum: AI-assisted development notes
+
+Development assisted by an AI pair-programmer: test migration to pytest, Redis cache (cache-aside) design, helpers to verify TTL and invalidation, and debugging guidance. All AI suggestions were reviewed and applied by the developer.
+
+
+
+
+
+
+
+
+
 ---
 
 ## Docker Installation on Windows (if you need it):
