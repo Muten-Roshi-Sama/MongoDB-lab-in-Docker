@@ -9,9 +9,11 @@ from flask import Flask, jsonify, request
 from pymongo import MongoClient
 from bson import ObjectId
 import json, os
+import redis_cache 
+
 
 app = Flask(__name__)
-ROUTE = 5000;
+ROUTE = 5000
 
 # MongoDB connection
 client = MongoClient("mongodb://mongo:27017/")
@@ -132,6 +134,11 @@ def add_instance(collection):
             target_collection = db[collection]
             result = target_collection.insert_one(new_data)
             
+            # REDIS: Invalidate list caches and optionally cache the new item
+            new_id = str(result.inserted_id)
+            redis_cache.delete_pattern(f"{collection}:list*")
+            redis_cache.set_json(redis_cache.make_id_key(collection, new_id), {**new_data, "_id": new_id})
+
             return jsonify({
                 "message": f"Item added successfully to {collection} collection. (Collection was empty, so any fields accepted.)",
                 "id": str(result.inserted_id),
@@ -156,6 +163,12 @@ def add_instance(collection):
         target_collection = db[collection]
         result = target_collection.insert_one(new_data)
         
+        # REDIS: Invalidate list caches and cache new item (works for all collections)
+        new_id = str(result.inserted_id)
+        redis_cache.delete_pattern(f"{collection}:list*")
+        redis_cache.set_json(redis_cache.make_id_key(collection, new_id), {**new_data, "_id": new_id})
+
+
         return jsonify({
             "message": f"Item added successfully to {collection} collection",
             "id": str(result.inserted_id),
@@ -195,10 +208,27 @@ def show_collection(collection):
                 return jsonify({"error": "Collection does not exist."}), 400
             
             coll = db[collection]
+            # build params dict from request args (if any)
+            params = request.args.to_dict(flat=True) if request.args else None
+            
+            # REDIS: try cache for lists
+            list_key = redis_cache.make_list_key(collection, params)
+            cached = redis_cache.get_json(list_key)
+            if cached is not None:
+                resp = jsonify(cached)
+                resp.headers['X-Cache'] = 'HIT'    # REDIS
+                return resp
+            
+            # DB fallback and cache store
             docs = list(coll.find())
             for doc in docs:
                 doc["_id"] = str(doc["_id"])
-            return jsonify(docs)
+            
+            redis_cache.set_json(list_key, docs)  # cache the list
+            resp = jsonify(docs)
+            resp.headers['X-Cache'] = 'MISS'
+            return resp
+        
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -215,11 +245,22 @@ def get_instance(collection, lookup_value):
         
         # Try ObjectId search first
         if ObjectId.is_valid(lookup_value):
+            # try cache first
+            id_key = redis_cache.make_id_key(collection, lookup_value)
+            cached = redis_cache.get_json(id_key)
+            if cached is not None:
+                resp = jsonify(cached)
+                resp.headers['X-Cache'] = 'HIT'
+                return resp
+            
+            # DB fallback   
             instance = target_collection.find_one({"_id": ObjectId(lookup_value)})
             if instance:
                 instance["_id"] = str(instance["_id"])
-                return jsonify(instance)
-        
+                resp = jsonify(instance)
+                resp.headers['X-Cache'] = 'MISS'
+                return resp
+
         # If not found by ID or not an ObjectId, search by other fields
         field_name = request.args.get('field', None)
         
@@ -275,6 +316,21 @@ def update_instance_by_field(collection, identifier):
         result = target_collection.update_one(filter_query, {"$set": updates})
         
         if result.modified_count > 0:
+            # REDIS: Invalidate relevant caches
+                        # Invalidate caches for this collection
+            redis_cache.delete_pattern(f"{collection}:list*")
+            if field_name == '_id':
+                # identifier is the id string
+                redis_cache.delete_key(redis_cache.make_id_key(collection, identifier))
+            else:
+                # best-effort: find updated doc and delete its id cache
+                try:
+                    updated_doc = target_collection.find_one(filter_query)
+                    if updated_doc and '_id' in updated_doc:
+                        redis_cache.delete_key(redis_cache.make_id_key(collection, str(updated_doc['_id'])))
+                except Exception:
+                    pass
+            
             return jsonify({"message": f"{collection.capitalize()} updated successfully"})
         else:
             return jsonify({"message": "No changes made or instance not found"})
@@ -318,6 +374,20 @@ def delete_instance(collection, identifier):
         result = target_collection.delete_one(filter_query)
         
         if result.deleted_count > 0:
+            # REDIS: Invalidate caches on delete
+            if field_name == '_id':
+                # identifier is the id string
+                redis_cache.delete_key(redis_cache.make_id_key(collection, identifier))
+            else:
+                # use instance (found earlier) to remove item cache if possible
+                try:
+                    if instance and '_id' in instance:
+                        redis_cache.delete_key(redis_cache.make_id_key(collection, str(instance['_id'])))
+                except Exception:
+                    pass
+            redis_cache.delete_pattern(f"{collection}:list*")
+            
+            # Then return the existing success response
             instance["_id"] = str(instance["_id"])
             return jsonify({
                 "message": f"{collection.capitalize()} deleted successfully",

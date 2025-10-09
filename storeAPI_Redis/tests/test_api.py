@@ -69,9 +69,7 @@ def showDB(collection, limit=None, fields=None):
 
     else:
         print(res.json().get('error', 'Unknown error'))
-
     return res
-
 
 
 
@@ -86,7 +84,7 @@ def sendRequest_get(command, collection, show=False):
     return response
 
 def add_instance(collection, json_data=None, show=False):
-    """POST /add/<collection> with provided JSON payload."""
+    # print(f"--- POST /{command}/{collection} ---")
     url = f"{HOST}/add/{collection}"
     response = requests.post(url, json=json_data, timeout=TIMEOUT)
     # print(response.json())
