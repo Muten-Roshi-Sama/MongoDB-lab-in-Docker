@@ -302,8 +302,11 @@ def update_instance_by_field(collection, identifier):
 
         target_collection = db[collection]
         updates = request.get_json()
-        field_name = request.args.get('field', 'name')  # Default to 'name'
-        
+        # Prefer explicit 'field' param. If absent and identifier looks like an ObjectId, treat as _id.
+        field_name = request.args.get('field')
+        if not field_name:
+            field_name = '_id' if ObjectId.is_valid(identifier) else 'name'
+
         # Build filter query
         if field_name == '_id':
             if not ObjectId.is_valid(identifier):

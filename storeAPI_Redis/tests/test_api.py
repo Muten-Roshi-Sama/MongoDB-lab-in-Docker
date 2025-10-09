@@ -18,7 +18,7 @@ TIMEOUT = 5
 #*  Helpers
 # ----------
 
-def showDB(collection, limit=None, fields=None):
+def showDB(collection, limit=1, fields=None):
     """
     Display collection contents with optional field filtering
     
@@ -242,7 +242,7 @@ def test_full_crud_flow():
 
 def test_show_and_search_helpers_work():
     # showDB
-    r = showDB("games")
+    r = showDB("games", 2)
     assert r.status_code == 200
     data = r.json()
     assert isinstance(data, list)
