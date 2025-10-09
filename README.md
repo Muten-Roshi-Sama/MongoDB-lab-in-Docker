@@ -162,31 +162,6 @@ pip install -r requirements.txt
 python -m pytest -q
 ```
 
-Notes:
-- The tests expect MongoDB and Redis to be reachable at the addresses defined in the compose file (inside Docker the Flask app connects to Redis using the Docker service name `redis`). The host running pytest connects to the Flask API over the HTTP port mapped by compose (default configuration in this lab maps the Flask API to a host port).
-- If you run tests locally without Docker you must ensure a MongoDB instance is running and the `MONGO_URI` used by the app points to it. Likewise, if you want Redis-enabled tests locally, run a local Redis instance and configure the app to point to it.
-
-### Quick troubleshooting
-
-- 415 Unsupported Media Type during tests: pytest helper functions send JSON using the `requests` client's `json=` parameter. If you see a 415, make sure you didn't accidentally send an empty body or remove the `json=` parameter.
-- Cache-related failures (tests asserting cache invalidation): if a list or id cache key isn't removed after a write, check that the Flask routes call the Redis helper to delete the appropriate key(s) after POST/PUT/DELETE operations.
-
----
-
-## Addendum: AI-assisted development notes
-
-Development assisted by an AI pair-programmer: test migration to pytest, Redis cache (cache-aside) design, helpers to verify TTL and invalidation, and debugging guidance. All AI suggestions were reviewed and applied by the developer.
-
-
-
-
-
-
-
-
-
-
-
 
 ---
 
@@ -201,7 +176,7 @@ Development assisted by an AI pair-programmer: test migration to pytest, Redis c
 
 
 ### Parameters :
-- TTL of 120 sec. (Short TTL avoids staleness, long TTL boosts cache hit rate)
+- TTL of 6 sec. (reduced from classic 120 sec. to 6 sec. to run pytest faster)
 
 ### What we added (Redis caching + pytest)
 
@@ -243,64 +218,63 @@ python -m pytest -q -s
 
 Result :
 ```
-(.venv) PS C:\Users\user\Desktop\ECAM\DataBase\X2\mongoDB_project\storeAPI_Redis> python -m pytest -q -s
+(.venv) PS C:\Users\user\Desktop\ECAM\DataBase\X2\mongoDB_project\storeAPI_Redis> 
+    
+>>> python -m pytest -q -s
+
+
 ..=== Games Collection (8 items) ===
 ... and 6 more items
 {
   "_id": "68e808ca5fef310fb7a1f8c6",
   "available": 35,
-  "genre": [
-    "FPS"
-  ],
+  "genre": ["FPS"],
   "item": "Black Ops 2",
-  "platforms": [
-    "PS3",
-    "PC",
-    "Xbox",
-    "WII"
-  ],
+  "platforms": ["PS3","PC","Xbox","WII"],
   "price": 29.99,
   "publisher": "Treyarch",
   "year": 2002
 }
-{
-  "_id": "68e808ca5fef310fb7a1f8c7",
-  "available": 4,
-  "genre": [
-    "Adventure"
-  ],
-  "item": "God Of War",
-  "platforms": [
-    "PS3",
-    "PC",
-    "Xbox",
-    "WII"
-  ],
-  "price": 89.99,
-  "publisher": "SIE",
-  "year": 2002
-}
+
 .COLD request time: 0.0085s, X-Cache=MISS
 Redis key exists after cold request? True
 HOT  request time: 0.0070s, X-Cache=HIT
 HOT is 0.0015 seconds faster than COLD.
+
 .Current TTL: 5
 Waiting 6s for TTL to expire...
 Exists after wait? False
+
 Repopulated after request? True
 .POST add time: 0.0094s, status=201
 List cache exists after add? False
+
 New id from POST: 68e808d05fef310fb7a1f8e6
 New item present in list after repopulate? True
 PUT update time: 0.0098s, status=200
+
 List cache exists after update? False
 GET single after update status: 200
 Updated price: 9.99
+
 DELETE time: 0.0092s, status=200
 List cache exists after delete? False
 .
-6 passed in 7.19s
+6 tests passed in 7.19s
 ```
+
+---
+
+## Addendum: AI-assisted development notes
+
+Development assisted by an AI pair-programmer: test migration to pytest, Redis cache (cache-aside) design, helpers to verify TTL and invalidation, and debugging guidance. All AI suggestions were reviewed and applied by the developer.
+
+
+
+
+
+
+
 
 
 
